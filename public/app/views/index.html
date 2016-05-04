@@ -7,7 +7,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
     </head>
     <body ng-app="app" ng-controller="ctrl">
-        <img src="google.png" ng-click="login()"/>
+        <img src="assets/img/google.png" ng-click="login()"/>
     </body>
 
     <script>
@@ -18,7 +18,7 @@
 
             var url;
             var windowThatWasOpened
-            $http.get("url").
+            $http.get("google/url").
             then(function(response){
                 url = response.data;
             });
@@ -33,7 +33,7 @@
                 var idx = urlWithCode.lastIndexOf("code=");
                 var code = urlWithCode.substring(idx + 5).replace("#", "");
 
-                $http.get("tokens?code=" + code).then(function(response){
+                $http.get("google/tokens?code=" + code).then(function(response){
                     console.log(response.data);
                 });
             };
