@@ -34,6 +34,7 @@ app.get("/url", function(req, res) {
 
 app.get("/tokens", function(req, res) {
     var code = req.query.code;
+    var plus = googleapis.plus('v1');
     console.log(code);
     oauth2Client.getToken(code, function(err, tokens) {
         if (err) {
@@ -43,6 +44,23 @@ app.get("/tokens", function(req, res) {
         }
         console.log(tokens);
         oauth2Client.setCredentials(tokens);
-        res.send("check node console for access tokens");
+        googleapis.options({
+            auth: oauth2Client
+        });
+        plus.people.get({
+            userId: 'me',
+            auth: oauth2Client
+        }, function(err, response) {
+            if(err){
+                console.log(err);
+                res.send(err);
+                return;
+            }
+            console.log(" ------------- Detalles de usuario ---------------");
+            console.log("id: " + response.id);
+            console.log("Name: " + response.displayName);
+            console.log("Image url: " + response.image.url);
+        });
+        res.send("check node console for access tokens and personal information");
     });
 });
