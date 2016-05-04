@@ -29,14 +29,17 @@ module.exports = function(app, express) {
     googleRouter.get("/tokens", function(req, res) {
         var code = req.query.code;
         var plus = googleapis.plus('v1');
-        console.log(code);
+        // console.log(code);
         oauth2Client.getToken(code, function(err, tokens) {
             if (err) {
                 console.log(err);
                 res.send(err);
                 return;
             }
-            console.log(tokens);
+            // console.log(tokens);
+
+// EJEMPLO DE OBTENER LOS DATOS DE GOOGLE + DEL USUARIO QUE HA HECHO LOGIN.
+
             oauth2Client.setCredentials(tokens);
             googleapis.options({
                 auth: oauth2Client
@@ -55,6 +58,30 @@ module.exports = function(app, express) {
                 console.log("Name: " + response.displayName);
                 console.log("Image url: " + response.image.url);
             });
+
+
+// EJEMPLO DE BÚSQUEDA DE UN VIDEO EN YOUTUBE.
+
+            var youtube = googleapis.youtube({
+                version: 'v3',
+                auth: oauth2Client
+            });
+
+            youtube.search.list({
+                part: 'snippet',
+                q: 'rubius',
+                maxResults: 1
+            }, function(err, response) {
+                console.log("----------- Test buscar video ------------");
+                if (err) {
+                    console.log(err);
+                    res.send(err);
+                    return;
+                }
+                console.log(response.items);
+            });
+
+
             res.send("check node console for access tokens and personal information");
         });
     });
